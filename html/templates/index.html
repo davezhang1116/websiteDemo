@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>MONEY</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: center">MONEY</h1>
+        <input type="text" id="input" onkeyup="search()" placeholder="Search for names.." title="Type in a name">
+
+        <table id="list">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Balance</th>
+                <th>Added</th>
+                <th>Last Modified</th>
+                <th>Actions</th>
+            </tr>
+            {% for task in tasks %}
+            <tr>
+                <td><a href="/history/{{ task.id }}" target="_blank"> {{ task.id }}</a> </td>
+                <td>{{ task.name }}</td>
+                <td>{{ "{:.2f}".format(task.balance) }}</td>
+                <td>{{ task.date_created }}</td>
+                <td>{{ task.last_modified }}</td>
+
+                <td>
+                    <a href="/cost/{{task.id}}">Cost</a>
+                    <br>
+                    <a href="/deposit/{{task.id}}">Deposit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <script>
+        function search() {
+          var input, filter, table, tr, td, i, txtValue;
+          input = document.getElementById("input");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("list");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          }
+        }
+        </script>
+
+
+        <div class="form">
+            <form action="/" method="POST">
+                Name: <input type="text" name="name"><br>
+                Money: <input type="number" name="money" step=0.01><br>
+                <input type="submit" value="Add People">
+            </form>
+        </div>
+</div>
+{% endblock %}
